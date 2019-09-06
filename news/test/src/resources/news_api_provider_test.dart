@@ -10,6 +10,7 @@ void main() {
   test('FetchTopIds returns a list of ids', () async {
      // setup of test case
      final newsApi = NewsApiProvider();
+     
      newsApi.client = MockClient((request) async {
 
        return Response(json.encode([1,2,3,4]), 200);

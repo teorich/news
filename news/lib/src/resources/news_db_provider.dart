@@ -1,3 +1,4 @@
+import 'package:news/src/resources/repository.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -6,11 +7,21 @@ import 'dart:async';
 import '../models/item_model.dart';
 
 
-class NewsDbProvider {
+class NewsDbProvider implements Source, Cache {
 
   Database db;
 
-  init() async {
+  NewsDbProvider() {
+    init();
+  }
+
+  // Todo -store and fetch top ids
+  Future<List<int>> fetchTopIds() { //just for abstract sake
+
+    return null;
+  }
+
+  void init() async {
 
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, 'items.db');
@@ -46,7 +57,7 @@ class NewsDbProvider {
     );
   }
 
-  fetchItem(int id) async {
+  Future<ItemModel>fetchItem(int id) async {
 
   final maps = await db.query(
 
@@ -64,8 +75,10 @@ class NewsDbProvider {
     return null;
   }
 
-  addItem(ItemModel item)  {
+  Future<int>addItem(ItemModel item)  {
     return db.insert("Items", item.toMapForDb());
 
   }
 }
+
+final newsDbProvider = NewsDbProvider();
